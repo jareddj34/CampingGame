@@ -66,4 +66,5 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
             inventoryManager.DropItem(this);
         }
     }
+
 }

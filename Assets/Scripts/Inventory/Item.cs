@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Item : MonoBehaviour
+public abstract class Item : AInteractable
 {
 
     public string itemName;
@@ -8,6 +8,7 @@ public class Item : MonoBehaviour
 
     public void Pickup()
     {
+        Debug.Log($"Picking up {itemName}");
         var inventoryManager = FindObjectOfType<InventoryManager>();
         inventoryManager.AddItem(this);
         Destroy(gameObject);
@@ -17,5 +18,30 @@ public class Item : MonoBehaviour
     private void TestPickup()
     {
         Pickup();
+    }
+
+    public override void Interact()
+    {
+        Pickup();
+    }
+
+    public virtual void UseItem()
+    {
+
+    }
+
+    public virtual void ConsumeItem()
+    {
+
+    }
+
+    public override void OnHover()
+    {
+        Debug.Log($"Hovering over {itemName}");
+    }
+
+    public override void OnStopHover()
+    {
+        Debug.Log($"Stopped hovering over {itemName}");
     }
 }

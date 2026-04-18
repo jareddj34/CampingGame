@@ -5,6 +5,8 @@ public class InputHandler : MonoBehaviour
 {
 
     public InventoryManager inventoryManager;
+    public InteractionManager interactionManager;
+    public PlayerInventory playerInventory;
 
     public void OnInventory(InputValue value)
     {
@@ -14,11 +16,20 @@ public class InputHandler : MonoBehaviour
         }
     }
 
-    void OnTriggerEnter(Collider other)
+    public void OnInteract(InputValue value)
     {
-        if(other.gameObject.tag == "Item")
+        if(value.isPressed)
         {
-            other.gameObject.GetComponent<Item>().Pickup();
+            interactionManager.Interact();
         }
     }
+
+    public void OnAttack(InputValue value)
+    {
+        if(value.isPressed)
+        {
+            playerInventory.UseItemInHand();
+        }
+    }
+    
 }

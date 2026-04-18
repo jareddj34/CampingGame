@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("References")]
     [SerializeField] private Camera playerCamera;
+    public Transform itemPoint;
     
     private CharacterController characterController;
     private Vector3 velocity;
@@ -40,6 +41,8 @@ public class PlayerController : MonoBehaviour
             enabled = false;
             return;
         }
+
+        itemPoint.SetParent(playerCamera.transform);
     }
 
     private void Update()
