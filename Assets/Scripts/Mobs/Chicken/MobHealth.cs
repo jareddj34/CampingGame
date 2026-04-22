@@ -6,14 +6,26 @@ using System.Collections;
 
 public class MobHealth : MonoBehaviour
 {
+    // Dropdown for mob types
+    public enum MobType
+    {
+        Chicken,
+        Deer,
+    }
+    public MobType mobType; // Set this in the Inspector for each mob prefab
+
     [SerializeField] private float m_MaxHealth = 4f; // chickens die in 4 hits like Minecraft
 
     public event Action<Vector3> OnDamaged;
+    public event Action OnDied;
 
     public float Current { get; private set; }
     public bool IsDead => Current <= 0f;
 
     public AudioSource hitSound; // Sound to play when hit
+    public AudioSource chickenHurtSound;
+    public AudioClip chickenHurtClip;
+    public AudioClip chickenDeathClip;
 
     private void Awake()
     {
@@ -31,15 +43,28 @@ public class MobHealth : MonoBehaviour
         {
             hitSound.Play();
         }
+        if (chickenHurtSound != null && chickenHurtClip != null)
+        {
+            chickenHurtSound.PlayOneShot(chickenHurtClip);
+        }
         PopOnHit(); // visual feedback for being hit
 
         if (IsDead)
         {
+            OnDied?.Invoke();
 
-            KillCounter.Instance?.AddKill(); // Increment kill count when mob dies
+            if(mobType == MobType.Chicken)
+            {
+                KillCounter.Instance?.AddKill(); // Increment kill count when mob dies
+            }
+
+            if (chickenHurtSound != null && chickenDeathClip != null)
+            {
+                chickenHurtSound.PlayOneShot(chickenDeathClip);
+            }
 
             // Simple death
-            Destroy(gameObject);
+            Destroy(gameObject, 1f);
         }
     }
 

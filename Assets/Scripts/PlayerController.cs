@@ -47,6 +47,9 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        // If player input is disabled in the game state manager, skip handling movement and rotation
+        if (!GameStateManager.Instance.IsPlayerInputEnabled)
+            return;
         HandleMovement();
         HandleRotation();
     }

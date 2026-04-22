@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Linq;
+using TMPro;
 
 public class InteractionManager : MonoBehaviour
 {
@@ -47,7 +48,9 @@ public class InteractionManager : MonoBehaviour
         {
             var interactables = hit.collider.GetComponents<AInteractable>();
             
+            CheckWhatKind(LayerMask.LayerToName(hit.collider.gameObject.layer));
             interactionPrompt.SetActive(true); // Show prompt if looking at an interactable, hide otherwise
+            // Debug.Log("Hit: " + LayerMask.LayerToName(hit.collider.gameObject.layer));
 
             if(interactables == null || interactables.Length == 0)
             {
@@ -70,8 +73,10 @@ public class InteractionManager : MonoBehaviour
             currentHoveredInteractables = interactables;
             foreach(var interactable in interactables)
             {
+                Debug.Log("Something");
                 if(interactable.CanInteract())
                 {
+                    Debug.Log("Hovering over: " + interactable.gameObject.name);
                     interactable.OnHover();
 
                 }
@@ -99,7 +104,26 @@ public class InteractionManager : MonoBehaviour
             }
             currentHoveredInteractables = null;
         }
-    }   
+    }
+
+    public void CheckWhatKind(string interactable)
+    {
+
+        if (interactable == null) return;
+
+        switch (interactable)
+        {
+            case "Item":
+                interactionPrompt.GetComponent<TMPro.TextMeshProUGUI>().text = "Pick Up [E]";
+                break;
+            case "NPC":
+                interactionPrompt.GetComponent<TMPro.TextMeshProUGUI>().text = "Talk [E]";
+                break;
+            default:
+                interactionPrompt.GetComponent<TMPro.TextMeshProUGUI>().text = "Interact [E]";
+                break;
+        }
+    }
 
 }
 

@@ -32,6 +32,10 @@ namespace ithappy.Animals_FREE
         [Tooltip("How far from the attacker the chicken tries to flee to.")]
         [SerializeField] private float m_FleeDistance = 10f;
 
+        [Header("Death")]
+        [SerializeField] private string m_DeathTrigger = "Death";
+        private bool m_HasDeathTrigger;
+
         // ── Internal state ─────────────────────────────────────────────────────
         private enum State { Idle, Walking, Fleeing }
         private State m_State = State.Idle;
@@ -61,6 +65,9 @@ namespace ithappy.Animals_FREE
             m_Transform = transform;
             m_SpawnPoint = m_Transform.position;
 
+            m_HasDeathTrigger = HasAnimatorParameter(m_DeathTrigger, AnimatorControllerParameterType.Trigger);
+            m_Health.OnDied += HandleDeath;
+
 
             m_Health.OnDamaged += HandleDamage;
         }
@@ -68,6 +75,7 @@ namespace ithappy.Animals_FREE
         private void OnDestroy()
         {
             m_Health.OnDamaged -= HandleDamage;
+            m_Health.OnDied -= HandleDeath;
         }
 
         // ──────────────────────────────────────────────────────────────────────
@@ -128,6 +136,18 @@ namespace ithappy.Animals_FREE
 
             if (m_StateTimer <= 0f)
                 EnterIdle();
+        }
+
+        // Death state
+        private void HandleDeath()
+        {
+            m_State = State.Idle;        // stop all movement
+            m_MoveAxis = Vector2.zero;
+            m_Mover.SetInput(Vector2.zero, m_Transform.position, false, false);
+            enabled = false;             // stop Update() from running
+
+            if (m_HasDeathTrigger)
+                m_Animator.SetTrigger(m_DeathTrigger);
         }
 
         // ── Transitions ────────────────────────────────────────────────────────

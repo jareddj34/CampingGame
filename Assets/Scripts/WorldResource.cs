@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class WorldResource :MonoBehaviour, IDamageable
+public class WorldResource : MonoBehaviour, IDamageable
 {
 
     public int resourceHealth;
@@ -14,11 +14,15 @@ public class WorldResource :MonoBehaviour, IDamageable
     public float popIntensity = 0.2f;
     public AnimationCurve popCurve;
 
+    public AudioSource hitSound; // Sound to play when hit
+
     public void TakeDamage(int damage)
     {
 
         StartCoroutine(OnPop());
         resourceHealth -= damage;
+
+        hitSound?.Play();
 
         if (resourceHealth <= 0)
         {
@@ -49,6 +53,12 @@ public class WorldResource :MonoBehaviour, IDamageable
         {
             Instantiate(dropItems[Random.Range(0, dropItems.Length)], transform.position + Vector3.up, Quaternion.identity);
         }
+
+        // Instantiate sound effect so it can play even after the object is destroyed
+        if (hitSound != null)        {
+            AudioSource.PlayClipAtPoint(hitSound.clip, transform.position);
+        }
+
         Destroy(gameObject);
     }
 }

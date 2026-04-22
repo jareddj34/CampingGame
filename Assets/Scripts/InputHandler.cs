@@ -10,6 +10,9 @@ public class InputHandler : MonoBehaviour
 
     public void OnInventory(InputValue value)
     {
+        if (!GameStateManager.Instance.IsPlayerInputEnabled)
+            return;
+
         if(value.isPressed)
         {
             inventoryManager.ToggleInventory();
@@ -18,6 +21,9 @@ public class InputHandler : MonoBehaviour
 
     public void OnInteract(InputValue value)
     {
+        if (!GameStateManager.Instance.IsPlayerInputEnabled)
+            return;
+
         if(value.isPressed)
         {
             interactionManager.Interact();
@@ -26,9 +32,18 @@ public class InputHandler : MonoBehaviour
 
     public void OnAttack(InputValue value)
     {
+        if (!GameStateManager.Instance.IsPlayerInputEnabled)
+            return;
+
         if(value.isPressed)
         {
+            Debug.Log("Attack button pressed");
             playerInventory.UseItemInHand();
+        }
+        else
+        {
+            Debug.Log("Attack button released");
+            playerInventory.ReleaseItemInHand();
         }
     }
     

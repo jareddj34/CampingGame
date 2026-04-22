@@ -75,4 +75,16 @@ public class PlayerInventory : MonoBehaviour
 
         itemInHand.UseItem();
     }
+
+    // Called on input RELEASE — only charge-based items (e.g. BowItem) respond to this
+    public void ReleaseItemInHand()
+    {
+        if (!itemInHand)
+            return;
+ 
+        if (itemInHand is Bow bow)
+        {
+            bow.ReleaseItem();
+        }
+    }
 }
