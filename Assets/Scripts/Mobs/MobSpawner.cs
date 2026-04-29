@@ -5,6 +5,8 @@ public class MobSpawner : MonoBehaviour
 {
     [Header("Spawning")]
     public GameObject[] mobPrefabs;
+    public GameObject bossPrefab;
+    public float bossSpawnChance = 0.1f; // 10% chance to spawn boss instead of regular mob
     public Transform player;
     public float spawnRadius = 30f;
     public float minDistanceFromPlayer = 10f;
@@ -38,8 +40,9 @@ public class MobSpawner : MonoBehaviour
 
             if (NavMesh.SamplePosition(candidate, out NavMeshHit hit, navMeshSampleRadius, NavMesh.AllAreas))
             {
-                GameObject prefab = mobPrefabs[Random.Range(0, mobPrefabs.Length)];
-                GameObject mob = Instantiate(prefab, hit.position, Quaternion.identity);
+
+                GameObject prefabToSpawn = Random.value < bossSpawnChance ? bossPrefab : mobPrefabs[Random.Range(0, mobPrefabs.Length)];
+                GameObject mob = Instantiate(prefabToSpawn, hit.position, Quaternion.identity);
 
                 // Hook into MobHealth's existing OnDied event
                 MobHealth health = mob.GetComponent<MobHealth>();

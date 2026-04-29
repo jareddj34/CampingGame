@@ -1,0 +1,91 @@
+title: ChickenGuy
+position: 25,16
+---
+<<declare $quest1_complete = false>>
+<<declare $quest2_complete = false>>
+<<declare $quest3_complete = false>>
+<<declare $intro_played = false>>
+<<declare $chickens_needed = 5>>
+
+<<if $intro_played == false>>
+    <<jump ChickenGuy_Intro>>
+<<elseif GetChickenKillCount() >= $chickens_needed && $quest1_complete == false>>
+    <<jump ChickenGuy_TurnIn1>>
+<<elseif GetChickenKillCount() >= $chickens_needed && $quest2_complete == false>>
+    <<jump ChickenGuy_TurnIn2>>
+<<elseif GetChickenKillCount() >= $chickens_needed && $quest3_complete == false>>
+    <<jump ChickenGuy_TurnIn3>>
+<<elseif $quest1_complete && $quest2_complete && $quest3_complete>>
+    <<jump ChickenGuy_Done>>
+<<else>>
+    <<jump ChickenGuy_Progress>>
+<<endif>>
+===
+
+title: ChickenGuy_Intro
+---
+Bob: Well, howdy there, stranger! #line:046205f
+Bob: Welcome to my land. Pull up a seat and stay a spell. #line:0307b90
+Bob: I been raisin' some of the finest chickens this side of the creek. #line:07962a7
+Bob: But the durned things busted outta the coop and scattered every which way! #line:0e633f0
+Bob: Got a big ol' shipment of wings comin' due real soon, and I can't afford to miss it. #line:02a0478
+Bob: Reckon you could lend a hand and round up some of these rascals for me? #line:06035d9
+Bob: I'll let you have my trusty axe — the one I use to, uh... prepare the wings. #line:002c83e
+Bob: She's right there to your left, just leanin' against the fence. #line:07ed8a9
+Bob: Come on back once you've wrangled yourself 5 of them chickens. #line:0227ef5
+Bob: Now git! And good luck out there! #line:0e876c1
+<<set $intro_played = true>>
+===
+
+title: ChickenGuy_Progress
+---
+Bob: How's the wranglin' comin' along, friend? #line:0e4d19f
+Bob: You only got {GetChickenKillCount()} chickens so far — I need a full {$chickens_needed}! #line:030088b
+Bob: Them chickens ain't gonna catch themselves! Now get back out there! #line:0cb2786
+===
+
+title: ChickenGuy_TurnIn1
+---
+Bob: Well, slap my knee! You actually went and done it! #line:0c072c3
+Bob: That's {GetChickenKillCount()} chickens — more'n enough, I'd say! #line:0a238e2
+Bob: I'm much obliged to ya, friend. You done me a real solid today. #line:0d02c68
+Bob: Here, take this for your trouble. {GiveBoomerang()} #line:0262b42
+Bob: That there's my boy's old boomerang. Figure you might put it to better use than he ever did. #line:0c8a000
+Bob: Say... you got a real knack for this chicken wranglin' business. #line:05717b2
+Bob: What if you rounded me up a total of 10 chickens? I'd make it worth your while with another little gift. #line:0ec4e35
+Bob: Now git on out there and don't come back 'til you got the count! #line:08ef8aa
+<<set $chickens_needed = 10>>
+<<set $quest1_complete = true>>
+===
+
+title: ChickenGuy_TurnIn2
+---
+Bob: Well, I'll be a hog in a mudhole! You really done it! #line:01b7503
+Bob: You actually got me {GetChickenKillCount()} chickens! #line:09f5074
+Bob: Lord have mercy, looks like the young'uns are gettin' Christmas gifts after all this year! #line:0ceb754
+Bob: Now listen here — you think you could fetch me 20 chickens total? You do that, and I can hang up my boots for good! #line:0efc822
+Bob: In the meantime, take this here bow and arrow. {GiveBow()} #line:0b8d79c
+Bob: My daddy handed that down to me when I weren't no taller than a fence post. #line:0de9e5e
+Bob: Woulda gave it to my own boy, but that kid couldn't hit the broad side of a barn! #line:0b2026f
+Bob: You get me them 20 chicken heads, and I'll have somethin' real special waitin' for ya! #line:0b2026f
+<<set $chickens_needed = 20>>
+<<set $quest2_complete = true>>
+===
+
+title: ChickenGuy_TurnIn3
+---
+Bob: Hot dog and hallelujah! You got the whole dadgum lot of 'em! #line:0e0db24
+Bob: {GetChickenKillCount()} chickens! I ain't never seen nothin' like it in all my years of farmin'! #line:05bd88e
+Bob: You just saved me from losin' this farm, friend. I mean that from the bottom of my heart. #line:0f12a31
+Bob: I can finally hang up my overalls and let my old bones rest a spell. #line:0a74c12
+Bob: Take this here as a token of my appreciation — it's the finest thing I own, and there ain't nobody more deservin'. {GiveSpecialReward()} #line:0d93b47
+Bob: You're welcome on my land any time, day or night. Mi casa es su casa, as they say. #line:0b61e20
+Bob: Now go on — you got bigger fish to fry than hangin' around an old farmer! #line:0c44f81
+<<set $quest3_complete = true>>
+===
+
+title: ChickenGuy_Done
+---
+Bob: Good to see ya again, friend! #line:0f92fc6
+Bob: Thanks to you, that shipment's goin' out right on time. Couldn't have done it without ya. #line:066d680
+===

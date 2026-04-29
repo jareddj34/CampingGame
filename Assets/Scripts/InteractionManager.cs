@@ -39,6 +39,15 @@ public class InteractionManager : MonoBehaviour
                     interactable.Interact();
                 }
             }
+
+
+            // If tag is ChickenWing
+            if(hit.collider.CompareTag("ChickenWing"))
+            {
+                Destroy(hit.collider.gameObject.transform.parent.gameObject); // Destroy root parent of the chicken wing object
+                KillCounter.Instance.AddKill();
+                
+            }
         }
     }
 

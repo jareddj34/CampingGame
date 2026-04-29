@@ -48,6 +48,7 @@ GameObject:
   - component: {fileID: 6592276722509129664}
   - component: {fileID: 670485627775616076}
   - component: {fileID: 5577188388949396721}
+  - component: {fileID: 5037221391055047177}
   m_Layer: 0
   m_Name: Chicken
   m_TagString: Untagged
@@ -163,6 +164,13 @@ MonoBehaviour:
   m_FleeDuration: 4
   m_FleeDistance: 10
   m_DeathTrigger: Death
+  m_AudioSource: {fileID: 5037221391055047177}
+  m_AmbientClips:
+  - {fileID: 8300000, guid: 15e595153ae18a44eb2301302ec92cf8, type: 3}
+  - {fileID: 8300000, guid: 1c61bbb1c107cbd46a747a29cf089fb4, type: 3}
+  - {fileID: 8300000, guid: 19a98e3abe70b92408ae18e6f89b7b98, type: 3}
+  m_SoundIntervalMin: 4
+  m_SoundIntervalMax: 10
 --- !u!114 &6592276722509129664
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -175,11 +183,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00e00fd5a61a237418ef6210a3a98861, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ithappy.Animals_FREE.MobHealth
+  mobType: 0
   m_MaxHealth: 3
   hitSound: {fileID: 670485627775616076}
   chickenHurtSound: {fileID: 5577188388949396721}
-  chickenHurtClip: {fileID: 8300000, guid: e92f79daafc39e549953c8f0c36f8786, type: 3}
-  chickenDeathClip: {fileID: 8300000, guid: ec4d3c83223e8634b9637e419bfc8589, type: 3}
+  chickenHurtClips:
+  - {fileID: 8300000, guid: ce4c12e36f055a74f9513ce8a2bfa16a, type: 3}
+  - {fileID: 8300000, guid: 0497caa3ca740914eb0b93b104617b45, type: 3}
+  chickenDeathClip: {fileID: 8300000, guid: f6f6cdea31074424a9dc8a1b42d3a753, type: 3}
+  chickenWingPrefab: {fileID: 6847299930622921387, guid: 907ec03a920f30340ae7cfb4a28bad4d, type: 3}
+  isBoss: 0
 --- !u!82 &670485627775616076
 AudioSource:
   m_ObjectHideFlags: 0
@@ -290,6 +303,103 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!82 &5037221391055047177
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 551403793009215596}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
   Loop: 0

@@ -17,6 +17,12 @@ public class InventoryManager : MonoBehaviour
 
     public CanvasGroup inventoryGroup;
 
+    public bool IsInventoryOpen = false;
+
+    [Header("Audio")]
+    public AudioSource equipSound;
+
+
     private void Awake()
     {
         inventoryData = new InventoryItemData[slots.Count];
@@ -28,6 +34,42 @@ public class InventoryManager : MonoBehaviour
         PlayerInventory.localInventory = playerInventory;
     }
 
+    private void Start()
+    {
+        // Set first action slot active by default
+        if (actionSlots != null && actionSlots.Count > 0)
+        {
+            SetActionSlotActive(actionSlots[0]);
+        }
+    }
+
+    private void Update()
+    {
+
+        if(GameStateManager.Instance.IsPaused)
+        {
+            return;
+        }
+
+        var scroll = Input.GetAxis("Mouse ScrollWheel");
+        if (Mathf.Approximately(scroll, 0f) || actionSlots.Count == 0)
+        {
+            return;
+        }
+
+        // Don't change hotbar while the inventory is open
+        if (inventoryGroup.alpha > 0f)
+        {
+            return;
+        }
+
+        var currentIndex = activeActionSlot != null ? actionSlots.IndexOf(activeActionSlot) : 0;
+        var direction = scroll > 0f ? 1 : -1;
+        var nextIndex = (currentIndex + direction + actionSlots.Count) % actionSlots.Count;
+
+        SetActionSlotActive(actionSlots[nextIndex]);
+    }
+
     public void AddItem(Item item)
     {
         // allItems.Add(item);
@@ -35,6 +77,8 @@ public class InventoryManager : MonoBehaviour
         {
             AddNewItem(item);
         }
+
+        equipSound.Play();
     }
 
     private bool TryStackItem(Item item)
@@ -83,6 +127,8 @@ public class InventoryManager : MonoBehaviour
 
                 inventoryData[i] = itemData;
                 slot.SetItem(inventoryItem);
+
+                SyncActiveSlotEquip();
 
                 return;
             }
@@ -146,15 +192,32 @@ public class InventoryManager : MonoBehaviour
     {
         var newSlotIndex = slots.IndexOf(newSlot);
         var oldSlotIndex = Array.FindIndex(inventoryData, data => data.inventoryItem == item);
-        if(oldSlotIndex == -1)
+        if (oldSlotIndex == -1 || newSlotIndex == -1 || oldSlotIndex == newSlotIndex)
         {
             return;
         }
 
         var oldData = inventoryData[oldSlotIndex];
-        inventoryData[oldSlotIndex] = default;
-        inventoryData[newSlotIndex] = oldData;
+        var newData = inventoryData[newSlotIndex]; // may be default (empty slot)
 
+        // Swap data
+        inventoryData[newSlotIndex] = oldData;
+        inventoryData[oldSlotIndex] = newData;
+
+        // Keep each slot's Item reference in sync with the data
+        slots[newSlotIndex].SetItem(oldData.inventoryItem);
+        slots[oldSlotIndex].SetItem(newData.inventoryItem); // null if dest was empty
+
+        // If the destination slot had an item, move its UI into the old slot
+        if (newData.inventoryItem != null)
+        {
+            newData.inventoryItem.transform.SetParent(slots[oldSlotIndex].transform);
+            newData.inventoryItem.SetAvailable();
+        }
+
+        
+        // --- Reconcile equipped item ---
+        SyncActiveSlotEquip();
     }
 
     private Item GetItemByName(string itemName)
@@ -178,6 +241,12 @@ public class InventoryManager : MonoBehaviour
 
     public void SetActionSlotActive(ActionSlot actionSlot)
     {
+
+        if(GameStateManager.Instance.IsPaused)
+        {
+            return;
+        }
+
         if(activeActionSlot == actionSlot)
         {
             return;
@@ -212,5 +281,31 @@ public class InventoryManager : MonoBehaviour
         inventoryGroup.blocksRaycasts = inventoryGroup.alpha == 1;
         Cursor.lockState = inventoryGroup.alpha == 1 ? CursorLockMode.None : CursorLockMode.Locked;
         Cursor.visible = inventoryGroup.alpha == 1;
+        IsInventoryOpen = inventoryGroup.alpha == 1;
+    }
+
+    private void SyncActiveSlotEquip()
+    {
+        if (activeActionSlot == null) return;
+
+        var shouldEquip = GetItemByActionSlot(activeActionSlot);
+        var currentlyHeld = PlayerInventory.localInventory.itemInHand;
+
+        // Already holding the right thing
+        if (currentlyHeld != null && shouldEquip != null &&
+            currentlyHeld.itemName == shouldEquip.itemName)
+        {
+            return;
+        }
+
+        if (currentlyHeld != null)
+        {
+            PlayerInventory.localInventory.UnequipItem(currentlyHeld);
+        }
+
+        if (shouldEquip != null)
+        {
+            PlayerInventory.localInventory.EquipItem(shouldEquip);
+        }
     }
 }

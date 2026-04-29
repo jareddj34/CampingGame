@@ -17,7 +17,7 @@ public class BoomerangLauncher : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(throwKey) && !inFlight && playerInventory.IsHoldingItem(playerInventory.itemInHand) && playerInventory.itemInHand.itemName == "Boomerang")
+        if (Input.GetKeyDown(throwKey) && !inFlight && playerInventory.IsHoldingItem(playerInventory.itemInHand) && playerInventory.itemInHand.itemName == "Boomerang" && GameStateManager.Instance.IsPlayerInputEnabled)
         {
             ThrowBoomerang();
         }
@@ -39,8 +39,8 @@ public class BoomerangLauncher : MonoBehaviour
         Boomerang boomerang = activeBoomerang.GetComponent<Boomerang>();
         if (boomerang != null)
         {
-            // Use camera forward so it throws where you're looking
-            boomerang.Launch(this.transform, throwPoint, Camera.main.transform.forward);
+            // Use camera forward so it throws where you're looking plus a bit of an upward angle
+            boomerang.Launch(this.transform, throwPoint, Camera.main.transform.forward + Vector3.up * 0.04f);
         }
 
         inFlight = true;

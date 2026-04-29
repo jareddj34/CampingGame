@@ -24,12 +24,27 @@ public class MobHealth : MonoBehaviour
 
     public AudioSource hitSound; // Sound to play when hit
     public AudioSource chickenHurtSound;
-    public AudioClip chickenHurtClip;
+    public AudioClip[] chickenHurtClips;
     public AudioClip chickenDeathClip;
+
+    private SkinnedMeshRenderer[] m_Renderers;
+    private Color[] m_OriginalColors;
+    private Coroutine m_FlashCoroutine;
+
+    public GameObject chickenWingPrefab;
+    public bool isBoss;
 
     private void Awake()
     {
         Current = m_MaxHealth;
+
+        m_Renderers = GetComponentsInChildren<SkinnedMeshRenderer>();
+        m_OriginalColors = new Color[m_Renderers.Length];
+        for (int i = 0; i < m_Renderers.Length; i++)
+        {
+            m_OriginalColors[i] = m_Renderers[i].material.color;
+        }
+
     }
 
     public void TakeDamage(float amount, Vector3 attackerPosition)
@@ -43,28 +58,52 @@ public class MobHealth : MonoBehaviour
         {
             hitSound.Play();
         }
-        if (chickenHurtSound != null && chickenHurtClip != null)
+        if (chickenHurtSound != null && chickenHurtClips != null && chickenHurtClips.Length > 0)
         {
-            chickenHurtSound.PlayOneShot(chickenHurtClip);
+            chickenHurtSound.PlayOneShot(chickenHurtClips[UnityEngine.Random.Range(0, chickenHurtClips.Length)]);
         }
         PopOnHit(); // visual feedback for being hit
+        FlashRed(); // flash red when hit
 
         if (IsDead)
         {
+
+            if (m_FlashCoroutine != null)
+                StopCoroutine(m_FlashCoroutine); // cancel the flash so it stays red
+            SetMeshColor(Color.red);             // lock it red on death
+
             OnDied?.Invoke();
 
-            if(mobType == MobType.Chicken)
-            {
-                KillCounter.Instance?.AddKill(); // Increment kill count when mob dies
-            }
+            // if(mobType == MobType.Chicken)
+            // {
+            //     KillCounter.Instance?.AddKill(); // Increment kill count when mob dies
+            // }
 
             if (chickenHurtSound != null && chickenDeathClip != null)
             {
                 chickenHurtSound.PlayOneShot(chickenDeathClip);
             }
 
+            StartCoroutine(SpawnChickenWingsAfterDelay(0.8f)); // spawn chicken wings after a short delay
+
             // Simple death
             Destroy(gameObject, 1f);
+        }
+    }
+
+    IEnumerator SpawnChickenWingsAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        if(isBoss)
+        {
+            for(int i = 0; i < 4; i++) // spawn 5 chicken wings on boss death
+            {
+                Instantiate(chickenWingPrefab, transform.position + Vector3.up * 0.8f, Quaternion.identity);
+            }
+        }
+        else if(mobType == MobType.Chicken)
+        {
+            Instantiate(chickenWingPrefab, transform.position + Vector3.up * 0.8f, Quaternion.identity);
         }
     }
 
@@ -88,5 +127,32 @@ public class MobHealth : MonoBehaviour
         }
 
         transform.localScale = originalScale;
+    }
+
+    public void FlashRed(float duration = 0.5f)
+    {
+        if (m_FlashCoroutine != null)
+            StopCoroutine(m_FlashCoroutine);
+        m_FlashCoroutine = StartCoroutine(FlashRedCoroutine(duration));
+    }
+
+    IEnumerator FlashRedCoroutine(float duration)
+    {
+        SetMeshColor(Color.red);
+        yield return new WaitForSeconds(duration);
+        if (!IsDead)
+            ResetMeshColor();
+    }
+
+    private void SetMeshColor(Color color)
+    {
+        foreach (var r in m_Renderers)
+            r.material.color = color;
+    }
+
+    private void ResetMeshColor()
+    {
+        for (int i = 0; i < m_Renderers.Length; i++)
+            m_Renderers[i].material.color = m_OriginalColors[i];
     }
 }

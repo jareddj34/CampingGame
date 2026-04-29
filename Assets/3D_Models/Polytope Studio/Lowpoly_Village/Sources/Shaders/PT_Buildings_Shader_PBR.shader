@@ -248,7 +248,7 @@ Shader "Polytope Studio/ PT_Medieval Buildings Shader PBR"
 			#pragma multi_compile_fragment _ _DBUFFER_MRT1 _DBUFFER_MRT2 _DBUFFER_MRT3
 			#pragma multi_compile _ _LIGHT_LAYERS
 			#pragma multi_compile_fragment _ _LIGHT_COOKIES
-			#pragma multi_compile _ _FORWARD_PLUS
+			#pragma multi_compile _ _CLUSTER_LIGHT_LOOP
 
 			#pragma multi_compile _ LIGHTMAP_SHADOW_MIXING
 			#pragma multi_compile _ SHADOWS_SHADOWMASK
@@ -3127,7 +3127,7 @@ Shader "Polytope Studio/ PT_Medieval Buildings Shader PBR"
 			sampler2D _Exteriorwallstexture;
 
 
-			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/UnityGBuffer.hlsl"
+			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/GBufferOutput.hlsl"
 
 			inline float4 TriplanarSampling322( sampler2D topTexMap, sampler2D midTexMap, sampler2D botTexMap, float3 worldPos, float3 worldNormal, float falloff, float2 tiling, float3 normalScale, float3 index )
 			{
@@ -3319,7 +3319,7 @@ Shader "Polytope Studio/ PT_Medieval Buildings Shader PBR"
 			}
 			#endif
 
-			FragmentOutput frag ( PackedVaryings input
+			GBufferFragOutput frag ( PackedVaryings input
 								#ifdef ASE_DEPTH_WRITE_ON
 								,out float outputDepth : ASE_SV_DEPTH
 								#endif
@@ -3586,7 +3586,7 @@ Shader "Polytope Studio/ PT_Medieval Buildings Shader PBR"
 					outputDepth = DepthValue;
 				#endif
 
-				return BRDFDataToGbuffer(brdfData, inputData, Smoothness, Emission + color.rgb, Occlusion);
+				return PackGBuffersBRDFData(brdfData, inputData, Smoothness, Emission + color.rgb, Occlusion);
 			}
 
 			ENDHLSL

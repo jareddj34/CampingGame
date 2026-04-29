@@ -19,6 +19,7 @@ public class PlayerInventory : MonoBehaviour
         itemInHand.transform.localRotation = Quaternion.identity;
         itemInHand.GetComponentInChildren<Collider>().enabled = false;
         itemInHand.GetComponent<Rigidbody>().isKinematic = true;
+        itemInHand.GetComponentInChildren<Collider>().enabled = false;
 
         // If it's a boomerang, tell the launcher about the new clone
         BoomerangItem boomerangItem = itemInHand.GetComponent<BoomerangItem>();

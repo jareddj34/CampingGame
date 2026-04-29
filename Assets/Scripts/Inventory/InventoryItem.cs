@@ -38,11 +38,16 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        if(eventData.pointerEnter == null || !eventData.pointerEnter.TryGetComponent(out InventorySlot inventorySlot))
+        // If we ended over any InventorySlot (directly or via a child item), OnDrop handled it.
+        if (eventData.pointerEnter != null &&
+            eventData.pointerEnter.GetComponentInParent<InventorySlot>() != null)
         {
-            rectTransform.SetParent(originalParent);
-            SetAvailable();
+            return;
         }
+
+        // Otherwise, snap back to where we started.
+        rectTransform.SetParent(originalParent);
+        SetAvailable();
     }
 
     public void SetAvailable()

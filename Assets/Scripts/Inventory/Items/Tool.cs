@@ -18,6 +18,8 @@ public class Tool : Item
     private WaitForSeconds waitForFirstHit, waitBetweenHits;
     private float lastUseTime;
 
+    public AudioSource useSound;
+
     private void Awake()
     {
         waitForFirstHit = new WaitForSeconds(waitBeforeFirstHit);
@@ -75,5 +77,10 @@ public class Tool : Item
         {
             Gizmos.DrawWireSphere(transform.TransformPoint(point), hitRadius);
         }
+    }
+
+    public void PlayUseSound()
+    {
+        useSound.Play();
     }
 }

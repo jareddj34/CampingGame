@@ -55,8 +55,17 @@ namespace ithappy.Animals_FREE
 
         private float m_StateTimer;
 
-
         // ──────────────────────────────────────────────────────────────────────
+
+        [Header("Ambient Sounds")]
+        [SerializeField] private AudioSource m_AudioSource;
+        [SerializeField] private AudioClip[] m_AmbientClips;
+        [Tooltip("Min seconds between random clucks.")]
+        [SerializeField] private float m_SoundIntervalMin = 4f;
+        [Tooltip("Max seconds between random clucks.")]
+        [SerializeField] private float m_SoundIntervalMax = 10f;
+
+
         private void Awake()
         {
             m_Mover     = GetComponent<CreatureMover>();
@@ -70,6 +79,9 @@ namespace ithappy.Animals_FREE
 
 
             m_Health.OnDamaged += HandleDamage;
+
+            if (m_AmbientClips != null && m_AmbientClips.Length > 0 && m_AudioSource != null)
+                StartCoroutine(AmbientSoundRoutine());
         }
 
         private void OnDestroy()
@@ -198,6 +210,22 @@ namespace ithappy.Animals_FREE
             foreach (var p in m_Animator.parameters)
                 if (p.name == paramName && p.type == type) return true;
             return false;
+        }
+
+        // -- Sounds
+        private IEnumerator AmbientSoundRoutine()
+        {
+            while (!m_Health.IsDead)
+            {
+                float wait = Random.Range(m_SoundIntervalMin, m_SoundIntervalMax);
+                yield return new WaitForSeconds(wait);
+
+                if (!m_Health.IsDead && m_AmbientClips.Length > 0)
+                {
+                    AudioClip clip = m_AmbientClips[Random.Range(0, m_AmbientClips.Length)];
+                    m_AudioSource.PlayOneShot(clip);
+                }
+            }
         }
     }
 }

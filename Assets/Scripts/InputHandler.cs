@@ -8,16 +8,17 @@ public class InputHandler : MonoBehaviour
     public InteractionManager interactionManager;
     public PlayerInventory playerInventory;
 
-    public void OnInventory(InputValue value)
-    {
-        if (!GameStateManager.Instance.IsPlayerInputEnabled)
-            return;
+    // public void OnInventory(InputValue value)
+    // {
+    //     if (!GameStateManager.Instance.IsPlayerInputEnabled && !inventoryManager.IsInventoryOpen)
+    //         return;
 
-        if(value.isPressed)
-        {
-            inventoryManager.ToggleInventory();
-        }
-    }
+    //     if(value.isPressed)
+    //     {
+    //         inventoryManager.ToggleInventory();
+    //         GameStateManager.Instance.SetInputEnabled(!inventoryManager.IsInventoryOpen);
+    //     }
+    // }
 
     public void OnInteract(InputValue value)
     {
@@ -44,6 +45,14 @@ public class InputHandler : MonoBehaviour
         {
             Debug.Log("Attack button released");
             playerInventory.ReleaseItemInHand();
+        }
+    }
+
+    public void OnPause(InputValue value)
+    {
+        if(value.isPressed)
+        {
+            GameStateManager.Instance.TogglePause();
         }
     }
     
