@@ -26,12 +26,14 @@ public class MobHealth : MonoBehaviour
     public AudioSource chickenHurtSound;
     public AudioClip[] chickenHurtClips;
     public AudioClip chickenDeathClip;
+    public AudioClip popSound;
 
     private SkinnedMeshRenderer[] m_Renderers;
     private Color[] m_OriginalColors;
     private Coroutine m_FlashCoroutine;
 
     public GameObject chickenWingPrefab;
+    public bool dropWings = true;
     public bool isBoss;
 
     private void Awake()
@@ -94,16 +96,18 @@ public class MobHealth : MonoBehaviour
     IEnumerator SpawnChickenWingsAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
-        if(isBoss)
+        if(isBoss && dropWings)
         {
             for(int i = 0; i < 4; i++) // spawn 5 chicken wings on boss death
             {
                 Instantiate(chickenWingPrefab, transform.position + Vector3.up * 0.8f, Quaternion.identity);
+                AudioSource.PlayClipAtPoint(popSound, transform.position);
             }
         }
-        else if(mobType == MobType.Chicken)
+        else if(mobType == MobType.Chicken && dropWings)
         {
             Instantiate(chickenWingPrefab, transform.position + Vector3.up * 0.8f, Quaternion.identity);
+            AudioSource.PlayClipAtPoint(popSound, transform.position);
         }
     }
 

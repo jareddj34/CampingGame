@@ -54,4 +54,9 @@ public class GameStateManager : MonoBehaviour
             TogglePause();
             SceneManager.LoadScene("StartScreen");
     }
+
+    public void RestartLevel()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
 }

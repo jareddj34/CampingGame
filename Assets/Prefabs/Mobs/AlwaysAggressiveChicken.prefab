@@ -44,14 +44,14 @@ GameObject:
   - component: {fileID: 3336953261988515202}
   - component: {fileID: 7842974360600998190}
   - component: {fileID: 6767925521142252101}
-  - component: {fileID: 2000924303057101658}
-  - component: {fileID: 5719025543064948260}
+  - component: {fileID: 1329060676995971957}
+  - component: {fileID: 239856190194363117}
   - component: {fileID: 6592276722509129664}
   - component: {fileID: 670485627775616076}
   - component: {fileID: 5577188388949396721}
   - component: {fileID: 5037221391055047177}
   m_Layer: 0
-  m_Name: Chicken
+  m_Name: AlwaysAggressiveChicken
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -65,11 +65,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 551403793009215596}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -4.9792066, y: -0.0001225148, z: 6.549481}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_ConstrainProportionsScale: 1
   m_Children:
+  - {fileID: 6191190698523603310}
   - {fileID: 5183647731961999036}
   - {fileID: 4073999794227819041}
   m_Father: {fileID: 0}
@@ -145,7 +146,7 @@ MonoBehaviour:
     body: 0.3
     head: 0.7
     eyes: 1
---- !u!114 &2000924303057101658
+--- !u!114 &1329060676995971957
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -154,16 +155,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 551403793009215596}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fbc2e43eeddfee94d81edcf6293518f3, type: 3}
+  m_Script: {fileID: 11500000, guid: 9f4fa1c54180ddd4497174f494c1071d, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ithappy.Animals_FREE.ChickenMob
+  m_EditorClassIdentifier: Assembly-CSharp::ithappy.Animals_FREE.AggressiveChickenMob
+  m_AlwaysAggressive: 1
+  m_AggroChance: 0
+  m_AggroRange: 10
+  m_AttackRange: 1.5
+  m_AttackCooldown: 1.5
+  m_AttackTrigger: Attack
+  m_HitboxObject: {fileID: 4122222679806785249}
   m_IdleTimeMin: 2
   m_IdleTimeMax: 5
   m_WalkTimeMin: 1
   m_WalkTimeMax: 3
   m_WanderRadius: 8
-  m_FleeDuration: 4
-  m_FleeDistance: 10
   m_DeathTrigger: Death
   m_AudioSource: {fileID: 5037221391055047177}
   m_AmbientClips:
@@ -172,7 +178,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 19a98e3abe70b92408ae18e6f89b7b98, type: 3}
   m_SoundIntervalMin: 4
   m_SoundIntervalMax: 10
---- !u!114 &5719025543064948260
+--- !u!114 &239856190194363117
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -209,6 +215,7 @@ MonoBehaviour:
   chickenDeathClip: {fileID: 8300000, guid: f6f6cdea31074424a9dc8a1b42d3a753, type: 3}
   popSound: {fileID: 8300000, guid: e421c91e5f3b8e44dacbab0088b352c6, type: 3}
   chickenWingPrefab: {fileID: 6847299930622921387, guid: 907ec03a920f30340ae7cfb4a28bad4d, type: 3}
+  dropWings: 0
   isBoss: 0
 --- !u!82 &670485627775616076
 AudioSource:
@@ -951,6 +958,72 @@ Transform:
   m_Children: []
   m_Father: {fileID: 7977381679572773134}
   m_LocalEulerAnglesHint: {x: 0.0000053552385, y: 0.00000063812354, z: -0.000013534364}
+--- !u!1 &4122222679806785249
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6191190698523603310}
+  - component: {fileID: 4866835302747408450}
+  - component: {fileID: 1246449180029435242}
+  m_Layer: 0
+  m_Name: Hitbox
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6191190698523603310
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4122222679806785249}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.248, z: 0.431}
+  m_LocalScale: {x: 0.41665334, y: 0.41665334, z: 0.41665334}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6357964986422072320}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &4866835302747408450
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4122222679806785249}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1246449180029435242
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4122222679806785249}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4261d29e34749a74c9cf475c21e73d54, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Hitbox
 --- !u!1 &4753150152536289061
 GameObject:
   m_ObjectHideFlags: 0

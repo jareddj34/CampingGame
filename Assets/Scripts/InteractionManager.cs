@@ -12,6 +12,8 @@ public class InteractionManager : MonoBehaviour
 
     public GameObject interactionPrompt; // UI element to show when looking at an interactable
 
+    public AudioSource chickenPickupSound;
+
     public void Awake()
     {
         cam = Camera.main;
@@ -46,6 +48,7 @@ public class InteractionManager : MonoBehaviour
             {
                 Destroy(hit.collider.gameObject.transform.parent.gameObject); // Destroy root parent of the chicken wing object
                 KillCounter.Instance.AddKill();
+                chickenPickupSound.Play();
                 
             }
         }

@@ -37,6 +37,9 @@ public class KillCounter : MonoBehaviour
     public void AddKill()
     {
         killCount++;
-        killCountText.text = "Wings: " + killCount;
+        if(killCountText != null)
+        {
+            killCountText.text = "Wings: " + killCount;
+        }
     }
 }

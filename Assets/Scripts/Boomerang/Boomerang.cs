@@ -14,6 +14,8 @@ public class Boomerang : MonoBehaviour
     private float distanceTravelled = 0f;
     private bool returning = false;
     private bool hasHit = false;
+    private float launchGraceTime = 0.025f;  // ← ADD: ignore collisions for this long after launch
+    private float timeSinceLaunch = 0f;
 
     // Call this right after instantiating the boomerang
     public void Launch(Transform playerTransform, Transform throwPointTransform, Vector3 direction)
@@ -27,12 +29,13 @@ public class Boomerang : MonoBehaviour
     {
         if (player == null) return;
 
+        timeSinceLaunch += Time.deltaTime;  // ← ADD
+
         // Spin the boomerang visually
         transform.Rotate(Vector3.up, rotationSpeed * Time.deltaTime, Space.Self);
 
         if (!returning)
         {
-            // Fly forward
             transform.position += throwDirection * forwardSpeed * Time.deltaTime;
             distanceTravelled += forwardSpeed * Time.deltaTime;
 
@@ -63,6 +66,7 @@ public class Boomerang : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
+        if (timeSinceLaunch < launchGraceTime) return;
         // Ignore the player
         if (other.transform == player) return;
         // Ignore other boomerangs

@@ -4,6 +4,8 @@ using Yarn.Unity;
 public class NPC : AInteractable
 {
 
+    public string startDialogueName;
+
     public DialogueRunner dialogueRunner;
     public GameObject dialogueUI;
     public KillCounter killCounter;
@@ -32,7 +34,7 @@ public class NPC : AInteractable
         {
             dialogueUI.SetActive(true);
             
-            dialogueRunner.StartDialogue("ChickenGuy");
+            dialogueRunner.StartDialogue(startDialogueName);
 
             SetTalking(true);
         }
